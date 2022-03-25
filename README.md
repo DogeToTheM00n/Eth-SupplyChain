@@ -22,15 +22,12 @@
 
 ```
 
-Deploy AccessRegistry contract
-Deployer (admin) -> CEO of the company.
-
-CEO -> Add, Revoke, Transfer Ownership of board of directors (owners of multisig wallet)
-
-Update address of AccessRegistry contract in Multisigwallet contract (line 30)
-Deploy Multisigwallet contract
-
-owner of multisig wallet -> board of directors 
-BOD -> proposeTransaction, confirmTransaction, executeTransaction, revokeConfirmation
-Min 60% of directors need to agree for a decision to be made.
-decision -> whether to add distributor `k` in our channel or not.
+Deploy AccessRegistry contract <br></br>
+Deployer (admin) -> CEO of the company.<br></br>
+CEO -> Add, Revoke, Transfer Ownership of board of directors (owners of multisig wallet) <br></br>
+Update address of AccessRegistry contract in Multisigwallet contract (line 30) <br></br>
+Deploy Multisigwallet contract <br></br>
+Owner of multisig wallet -> board of directors <br></br>
+BOD -> proposeTransaction, confirmTransaction, executeTransaction, revokeConfirmation<br></br>
+Min 60% of directors need to agree for a decision to be made.<br></br>
+Decision -> whether to add distributor `k` in our channel or not. <br></br>
