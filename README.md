@@ -1,12 +1,13 @@
-# Hardhat project for supply chain management on Ethereum. 
+# Hardhat project for supply chain management on Ploygon. 
 
 ## Contracts directory structure
 ```
 .
 |-- Greeter.sol
+|-- Supplychain.sol
 |-- accesscontrol
 |   |-- ConsumerRole.sol
-|   |-- Distributor.sol
+|   |-- DistributorRole.sol
 |   |-- FarmerRole.sol
 |   |-- RetailerRole.sol
 |   `-- Roles.library.sol
@@ -18,7 +19,7 @@
     |-- Ownable.sol
     `-- Tx.data.sol
 
-3 directories, 11 files
+3 directories, 12 files
 
 ```
 
