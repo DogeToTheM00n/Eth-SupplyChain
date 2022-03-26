@@ -11,12 +11,12 @@ abstract contract Ownable is Context {
         _transferOwnership(_msgSender());
     }
 
-    function owner() public view virtual returns (address) {
+    function getowner() public view virtual returns (address) {
         return _owner;
     }
 
     modifier onlyOwner() {
-        require(owner() == _msgSender(), "Ownable: caller is not the owner");
+        require(getowner() == _msgSender(), "Ownable: caller is not the owner");
         _;
     }
 

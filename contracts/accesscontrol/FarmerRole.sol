@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import "./Roles.library.sol";
 
 contract FarmerRole {
-  using Roles for Roles.Role;
+  using Roles for Roles.Role;   
   Roles.Role private farmers;
 
   event FarmerAdded(address indexed account);

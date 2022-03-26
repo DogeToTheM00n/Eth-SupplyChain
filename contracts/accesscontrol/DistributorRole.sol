@@ -18,6 +18,14 @@ contract DistributorRole {
         require(MultisigwalletAddress ==msg.sender,"You can not add a new distributor");
       _;
   }
+  
+  // Define a modifier that checks to see if msg.sender has the appropriate role
+
+  modifier onlyDistributor() {
+    require(isDistributor(msg.sender));
+    _;
+  }
+
 
   function isDistributor(address account) public view returns (bool) {
     return distributors.hasRole(account);
