@@ -15,7 +15,7 @@ abstract contract Ownable is Context {
         return _owner;
     }
 
-    modifier onlyOwner() {
+    modifier onlyOwner() virtual{
         require(getowner() == _msgSender(), "Ownable: caller is not the owner");
         _;
     }

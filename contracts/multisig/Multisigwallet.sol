@@ -27,7 +27,7 @@ contract Multisigwallet {
     transaction[] public transactions;
 
     // Address of the access registry contract
-    address AccessregistryAddress =0xa9d281dA3B02DF2ffc8A1955c45d801B5726661D;
+    address AccessregistryAddress;
 
     modifier onlyOwner() {
         (bool result,bytes memory data) =AccessregistryAddress.call(abi.encodeWithSignature("isOwner(address)", msg.sender));
@@ -53,7 +53,8 @@ contract Multisigwallet {
         _;
     }
 
-    constructor() payable{
+    constructor(address _accessregistryAddress) payable{
+        AccessregistryAddress=_accessregistryAddress;
     }
 
     receive() external payable {
@@ -65,7 +66,7 @@ contract Multisigwallet {
         return address(this).balance;
     }
     // Propose a new transaction 
-    function proposeTransaction(address _to, uint _value, bytes memory _data) public {
+    function proposeTransaction(address _to, uint _value, bytes memory _data) public  {
         uint txIndex =transactions.length;
         transactions.push(
             transaction({

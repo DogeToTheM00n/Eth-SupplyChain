@@ -9,7 +9,8 @@ library Roles {
         _;
     }
     function addRole(Role storage _role,address _account) validAddress(_account) internal {
-        require(_role.granted[_account] !=false,"This address already has this role");
+        require(_account != address(0));
+        require(!hasRole(_role, _account));
         _role.granted[_account] = true;
     }
     function hasRole(Role storage _role,address _account) validAddress(_account) internal view returns(bool){

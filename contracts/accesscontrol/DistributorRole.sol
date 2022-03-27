@@ -9,8 +9,13 @@ contract DistributorRole {
   event DistributorAdded(address indexed account);
   event DistributorRemoved(address indexed account);
 
-  // Address of the access registry contract
-  address MultisigwalletAddress =0xa9d281dA3B02DF2ffc8A1955c45d801B5726661D;
+  // Address of the Multi sig contract
+  address MultisigwalletAddress;
+  
+  // NOTE: Change this visiblity from public
+  function setMultisigwalletAddress(address _multisigwalletAddress) public{
+    MultisigwalletAddress=_multisigwalletAddress;
+  }
 
   constructor() {}
   

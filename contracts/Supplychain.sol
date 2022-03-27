@@ -221,21 +221,24 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         newProduce.distributorID = distributorID; 
         newProduce.retailerID = retailerID;
         newProduce.consumerID = consumerID;
-
+        
         items[_productcode] = newProduce; 
-        uint placeholder; // Block number place holder
+        _help(_productcode);
+        // Increment itemCounter
+        itemCounter.increment();
+        
+        emit ProduceByFarmer(_productcode);
+    }
 
+    function _help(uint _productcode) internal {
+        
+        uint placeholder; // Block number place holder
         Txblocks memory txBlock; // create new txBlock struct
         txBlock.FTD = placeholder; // assign placeholder values
         txBlock.DTR = placeholder;
         txBlock.RTC = placeholder;
 
         itemsHistory[_productcode] = txBlock; // add txBlock to itemsHistory mapping by productcode
-
-        // Increment itemCounter
-        itemCounter.increment();
-        
-        emit ProduceByFarmer(_productcode);
     }
     /*
     2nd step in supplychain

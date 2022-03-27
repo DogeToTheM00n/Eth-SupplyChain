@@ -13,7 +13,7 @@ contract Accessregistry{
     address admin;
 
     address[] public owners;
-
+    
     mapping(address =>bool) public isOwner; 
     uint256 public MINIMUM_CONFIRMATIONS;
 
