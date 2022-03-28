@@ -62,6 +62,17 @@ async function main() {
   // console.log(await multisigwallet.getBalance());  // 7 ethers
   // console.log("After farmer balance",await farmer.getBalance());  // 10001 ethers
 
+  
+  
+  //#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+  //#-#-#-#-#-#-#-#-#-#-#-#-#- Deploying PriceConsumerv3 -#-#-#-#-#-#-#-#-#-
+  //#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
+  // const PriceConsumerV3 =await ethers.getContractFactory("PriceConsumerV3")
+  // const priceConsumerV3 = await PriceConsumerV3.deploy();
+  // priceConsumerV3.deployed();
+
+  // returns 329679367296
 
   // -------------------------- Deploying Entities ----------------------
   //#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
