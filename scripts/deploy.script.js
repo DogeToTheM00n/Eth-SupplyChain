@@ -146,9 +146,6 @@ async function main() {
 
 
 
-
-   //#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-   //#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
    //#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
    //#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
@@ -156,7 +153,93 @@ async function main() {
   const SupplyChainContract = await ethers.getContractFactory("Supplychain");
   const supplychain= await SupplyChainContract.deploy();
   supplychain.deployed();
-  console.log("Deploying supply chain contract at address ", supplychain.address);
+  // console.log("Deploying supply chain contract at address ", supplychain.address);
+
+
+
+
+  //-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+  //-#-#-#-#-#-#-#-#-#-#-#-#-Testing smart contracts-#-#-#-#-#-#-#-#-#-#-#-#-#-
+  //-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
+  // Farmer produce food Item
+
+  // console.log((await (await farmer.isFarmer(CEO.address)).wait()).events[0].args);
+  // console.log((await (await farmer.isFarmer(farmerSigner.address)).wait()).events[0].args);
+  // console.log((await (await farmer.isFarmer(BOD2.address)).wait()).events[0].args);
+
+  // Why the f , this not working for farmerSigner but working works perfectly fine for CEO entity
+  const tx =await supplychain.connect(CEO).produceItemByFarmer(
+            1,
+            "Rajesh kumar",
+            "Good farner",
+            "44 48 01.5",
+            "21 33 04.19",
+            "40 kg fresh tomatos",
+            120,
+            "0x00",
+            );
+  // console.log(((await tx.wait()).events[0].args))
+
+  // Farmer sell Item
+  const tx2 = await supplychain.connect(CEO).sellItemByFarmer(1,150);
+  // console.log(((await tx2.wait()).events[0].args))
+
+  // Distributor request to buy food Item from farmer
+  // console.log(await distributor.isDistributor(CEO.address));
+  // console.log(await distributor.isDistributor(distributorSigner.address));
+  // console.log(await distributor.isDistributor(BOD2.address));
+
+  const tx3 = await supplychain.connect(CEO).purchaseItemByDistributor(1,{value: 200});
+  // console.log(((await tx3.wait()).events[0].args));
+
+  // Farmer ship the food item
+  const tx4 = await supplychain.connect(CEO).shippedItemByFarmer(1);
+  // console.log(((await tx4.wait()).events[0].args));
+
+  // Distributor on receiving food item
+  const tx5 =await supplychain.connect(CEO).receivedItemByDistributor(1);
+  // console.log(((await tx5.wait()).events[0].args));
+
+  // Distributor process  food item
+  const tx6 =await supplychain.connect(CEO).processedItemByDistributor(1,6);
+  // console.log(((await tx6.wait()).events[0].args));
+
+  // Distributor packages food item
+  const tx7 =await supplychain.connect(CEO).packageItemByDistributor(1);
+  // console.log(((await tx7.wait()).events[0].args));
+  
+  //  Distributor sells food item
+  const tx8 =await supplychain.connect(CEO).sellItemByDistributor(1,230);
+  // console.log(((await tx8.wait()).events[0].args));
+
+  //  Retailer purchase food item from distributor
+  const tx9 =await supplychain.connect(CEO).purchaseItemByRetailer(1,{value:235});
+  // console.log(((await tx9.wait()).events[0].args));
+  
+  //  Distributor ship packages food item
+  const tx10 =await supplychain.connect(CEO).shippedItemByDistributor(1);
+  // console.log(((await tx10.wait()).events[0].args));
+
+  //  Retailer receives food item
+  const tx11 =await supplychain.connect(CEO).receivedItemByRetailer(1);
+  // console.log(((await tx11.wait()).events[0].args));
+
+  //  Retailer sell food item
+  const tx12 =await supplychain.connect(CEO).sellItemByRetailer(1,260);
+  // console.log(((await tx12.wait()).events[0].args));
+
+  //  Consumer purchases food item
+  const tx13 =await supplychain.connect(CEO).purchaseItemByConsumer(1,{value: 260});
+  // console.log(((await tx13.wait()).events[0].args));
+  
+
+  // console.log(await supplychain.connect(CEO).fetchItemBufferOne(1));
+  // console.log(await supplychain.connect(CEO).fetchItemBufferTwo(1));
+  // console.log(await supplychain.connect(CEO).fetchitemHistory(1));
+  
+  // const anEthersProvider = new ethers.providers.Web3Provider(network.provider)
+  // console.log((await anEthersProvider.getBlock(27)).transactions);
 }
 
 main()

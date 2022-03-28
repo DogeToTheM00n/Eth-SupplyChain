@@ -32,3 +32,4 @@ Owner of multisig wallet -> board of directors <br></br>
 BOD -> proposeTransaction, confirmTransaction, executeTransaction, revokeConfirmation<br></br>
 Min 60% of directors need to agree for a decision to be made.<br></br>
 Decision -> whether to add distributor `k` in our channel or not. <br></br>
+ 

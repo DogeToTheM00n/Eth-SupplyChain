@@ -1,23 +1,44 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
+/**
+ * @title Roles
+ * @dev Library for managing addresses assigned to a Role.
+ */
 library Roles {
-    struct Role{
-        mapping(address =>bool) granted;
-    }
-    modifier validAddress(address _account){
-        require(_account != address(0),"Invalid address");
-        _;
-    }
-    function addRole(Role storage _role,address _account) validAddress(_account) internal {
-        require(_account != address(0));
-        require(!hasRole(_role, _account));
-        _role.granted[_account] = true;
-    }
-    function hasRole(Role storage _role,address _account) validAddress(_account) internal view returns(bool){
-        return _role.granted[_account];
-    }   
-    function remove(Role storage _role, address _account) validAddress(_account)internal {
-        require(_role.granted[_account] !=true,"");
-        _role.granted[_account] = false;
+  struct Role {
+    mapping (address => bool) bearer;
+  }
+
+  /**
+   * @dev give an account access to this role
+   */
+  function add(Role storage role, address account) internal {
+    require(account != address(0));
+    require(!has(role, account));
+
+    role.bearer[account] = true;
+  }
+
+  /**
+   * @dev remove an account's access to this role
+   */
+  function remove(Role storage role, address account) internal {
+    require(account != address(0));
+    require(has(role, account));
+
+    role.bearer[account] = false;
+  }
+
+  /**
+   * @dev check if an account has this role
+   * @return bool
+   */
+  function has(Role storage role, address account)
+    internal
+    view
+    returns (bool)
+  {
+    require(account != address(0),"Invalid Address");
+    return role.bearer[account];
   }
 }

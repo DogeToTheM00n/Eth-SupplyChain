@@ -194,7 +194,7 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
     */
 
     function produceItemByFarmer(uint _productcode, string memory _originFarmName, string memory _originFarmInformation, string memory _originFarmLatitude, string memory _originFarmLongitude, string memory _productNotes, uint _price, string memory _productImageHash) public
-        onlyFarmer() // check address belongs to farmerRole
+        onlyFarmer() 
         {
 
         address distributorID;      // Empty distributorID address
@@ -205,17 +205,17 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
 
         newProduce.itemCounter = itemCounter.current();     
         newProduce.productcode = _productcode;         
+        newProduce.productID = (_productcode+itemCounter.current()).toString();  
         newProduce.entityID = msg.sender;  
         newProduce.originFarmerID = msg.sender;     
         newProduce.originFarmName = _originFarmName; 
         newProduce.originFarmInformation = _originFarmInformation;
         newProduce.originFarmLatitude = _originFarmLatitude; 
         newProduce.originFarmLongitude = _originFarmLongitude;  
-        newProduce.productID = (_productcode+itemCounter.current()).toString();  
         newProduce.productNotes = _productNotes;
+        newProduce.productDate = block.timestamp;
         newProduce.productPrice = _price;  
         newProduce.productImageHash = _productImageHash;
-        newProduce.productDate = block.timestamp;
         newProduce.productSliced = 0;
         newProduce.itemState = defaultState; 
         newProduce.distributorID = distributorID; 
@@ -255,11 +255,11 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
     }
     /*
     3rd step in supplychain
-    Allows distributor to purchase cheese
+    Allows distributor to purchase food Item
     */
 
     function purchaseItemByDistributor(uint _productcode) public payable
-        onlyDistributor() 
+        onlyDistributor
         forSaleByFarmer(_productcode) 
         paidEnough(items[_productcode].productPrice)
         checkValue(_productcode, payable(msg.sender)) 
