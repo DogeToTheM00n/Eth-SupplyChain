@@ -1,0 +1,9 @@
+.ListBod{
+    border: 1px solid rgba(200,200,200);
+    width: 40%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2%;
+}
