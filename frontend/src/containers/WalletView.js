@@ -21,7 +21,8 @@ const WalletView = () => {
         console.log(formValues)
     }
     useEffect(() => {
-
+        // 
+        
     }, [])
     return <div style = {{marginTop: "10vh"}}>
             <div style={{width: "40%", textAlign: "center", margin: "auto", fontSize: "40px"}}>Wallet Transactions</div>
