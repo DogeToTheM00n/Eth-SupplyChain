@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 import "./Roles.library.sol";
+import "hardhat/console.sol";
 
 // Define a contract 'DistributorRole' to manage this role - add, remove, check
 contract DistributorRole {
@@ -24,13 +25,17 @@ contract DistributorRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyDistributor() {
+    // console.log("msg.sender",msg.sender);
+    // console.log(isDistributor(msg.sender));
     require(isDistributor(msg.sender),"Invalid Role");
     _;
   }
+
   modifier onlyBODirector() {
         require(MultisigwalletAddress ==msg.sender,"You can not add a new distributor");
-      _;
-  }
+      _;                       
+  }                         
+  
   // Define a function 'isDistributor' to check this role
   function isDistributor(address account) public view returns (bool) {
     return distributors.has(account);

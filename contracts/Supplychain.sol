@@ -7,6 +7,8 @@ import "./accesscontrol/RetailerRole.sol";
 import "./utils/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "hardhat/console.sol";
+
 
 contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole, Ownable{
     using Counters for Counters.Counter;
@@ -18,19 +20,13 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
     Counters.Counter private itemCounter;
 
     enum State{
-        ProduceByFarmer,         // 0
-        ForSaleByFarmer,         // 1
-        PurchasedByDistributor,  // 2
-        ShippedByFarmer,         // 3
-        ReceivedByDistributor,   // 4
-        ProcessedByDistributor,  // 5
-        PackageByDistributor,    // 6
-        ForSaleByDistributor,    // 7
-        PurchasedByRetailer,     // 8
-        ShippedByDistributor,    // 9
-        ReceivedByRetailer,      // 10
-        ForSaleByRetailer,       // 11
-        PurchasedByConsumer      // 12
+        ProduceByFarmer,                // 0      
+        PurchasedByDistributor,         // 1
+        ForSaleByDistributor,           // 4
+        PurchasedByRetailer,            // 5   
+        ProcessedAndPackagedByRetailer, // 6
+        ForSaleByRetailer,              // 7
+        PurchasedByConsumer             // 8
     }
 
     // Setting a Default state constant 
@@ -41,10 +37,6 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         string productID;               // stockunit + productcode
         address entityID;               // Metamask-Ethereum address of the current owner (Changes as the product moves through different stages)
         address originFarmerID;         // Metamask-Ethereum address of the Farmer 
-        string  originFarmName;         // Farmer Name
-        string  originFarmInformation;  // Farmer Information
-        string  originFarmLatitude;     // Farm Latitude
-        string  originFarmLongitude;    // Farm Longitude
         string  productNotes;           // Product Notes
         uint256 productDate;            // Product manufacture date 
         uint    productPrice;           // Product Price
@@ -68,19 +60,13 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
     // that track its journey through the supply chain -- to be sent from DApp.
     mapping (uint => Txblocks) itemsHistory;
 
-    event ProduceByFarmer(uint productcode);         //1
-    event ForSaleByFarmer(uint productcode);         //2
-    event PurchasedByDistributor(uint productcode);  //3
-    event ShippedByFarmer(uint productcode);         //4
-    event ReceivedByDistributor(uint productcode);   //5
-    event ProcessedByDistributor(uint productcode);  //6
-    event PackagedByDistributor(uint productcode);   //7
-    event ForSaleByDistributor(uint productcode);    //8
-    event PurchasedByRetailer(uint productcode);     //9
-    event ShippedByDistributor(uint productcode);    //10
-    event ReceivedByRetailer(uint productcode);      //11
-    event ForSaleByRetailer(uint productcode);       //12
-    event PurchasedByConsumer(uint productcode);     //13
+    event ProduceByFarmer(uint productcode);      
+    event PurchasedByDistributor(uint productcode);  
+    event ForSaleByDistributor(uint productcode);   
+    event PurchasedByRetailer(uint productcode);    
+    event ProcessedAndPackagedByRetailer(uint productcode);
+    event ForSaleByRetailer(uint productcode);       
+    event PurchasedByConsumer(uint productcode);    
     
     // Define a modifer that checks to see if msg.sender == owner of the contract
     modifier onlyOwner() override{
@@ -114,33 +100,9 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         _;
     }
 
-    modifier forSaleByFarmer(uint _productcode) {
-        require(items[_productcode].itemState == State.ForSaleByFarmer);
-        _;
-    }
 
     modifier purchasedByDistributor(uint _productcode) {
         require(items[_productcode].itemState == State.PurchasedByDistributor);
-        _;
-    }
-
-    modifier shippedByFarmer(uint _productcode) {
-        require(items[_productcode].itemState == State.ShippedByFarmer);
-        _;
-    }
-
-    modifier receivedByDistributor(uint _productcode) {
-        require(items[_productcode].itemState == State.ReceivedByDistributor);
-        _;
-    }
-
-    modifier processByDistributor(uint _productcode) {
-        require(items[_productcode].itemState == State.ProcessedByDistributor);
-        _;
-    }
-
-    modifier packagedByDistributor(uint _productcode) {
-        require(items[_productcode].itemState == State.PackageByDistributor);
         _;
     }
 
@@ -149,19 +111,13 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         _;
     }
 
-
-    modifier shippedByDistributor(uint _productcode) {
-        require(items[_productcode].itemState == State.ShippedByDistributor);
-        _;
-    }
-
     modifier purchasedByRetailer(uint _productcode) {
         require(items[_productcode].itemState == State.PurchasedByRetailer);
         _;
     }
 
-    modifier receivedByRetailer(uint _productcode) {
-        require(items[_productcode].itemState == State.ReceivedByRetailer);
+    modifier processedAndPackagedByRetailer(uint _productcode) {
+        require(items[_productcode].itemState == State.ProcessedAndPackagedByRetailer);
         _;
     }
 
@@ -170,7 +126,7 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         _;
     }
 
-    modifier purchasedByConsumer(uint _productcode) {
+    modifier purchasedByConsumer(uint _productcode) {                               
         require(items[_productcode].itemState == State.PurchasedByConsumer);
         _;
     }
@@ -188,15 +144,12 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         selfdestruct(ownerAddressPayable);
         }
     }
-    /*
-    1st step in supplychain
-    Allows farmer to create food item
-    */
 
-    function produceItemByFarmer(uint _productcode, string memory _originFarmName, string memory _originFarmInformation, string memory _originFarmLatitude, string memory _originFarmLongitude, string memory _productNotes, uint _price, string memory _productImageHash) public
+
+    function produceItemByFarmer(uint _productcode, string memory _productNotes, uint _price, string memory _productImageHash) public
         onlyFarmer() 
         {
-
+        
         address distributorID;      // Empty distributorID address
         address retailerID;         // Empty retailerID address
         address consumerID;         // Empty consumerID address
@@ -208,10 +161,6 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         newProduce.productID = (_productcode+itemCounter.current()).toString();  
         newProduce.entityID = msg.sender;  
         newProduce.originFarmerID = msg.sender;     
-        newProduce.originFarmName = _originFarmName; 
-        newProduce.originFarmInformation = _originFarmInformation;
-        newProduce.originFarmLatitude = _originFarmLatitude; 
-        newProduce.originFarmLongitude = _originFarmLongitude;  
         newProduce.productNotes = _productNotes;
         newProduce.productDate = block.timestamp;
         newProduce.productPrice = _price;  
@@ -240,27 +189,11 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
 
         itemsHistory[_productcode] = txBlock; // add txBlock to itemsHistory mapping by productcode
     }
-    /*
-    2nd step in supplychain
-    Allows farmer to sell food item
-    */ 
-    function sellItemByFarmer(uint _productcode, uint _price) public
-        onlyFarmer()                
-        producedByFarmer(_productcode)
-        verifyCaller(items[_productcode].entityID) 
-        {
-        items[_productcode].itemState = State.ForSaleByFarmer;
-        items[_productcode].productPrice = _price;
-        emit ForSaleByFarmer(_productcode);
-    }
-    /*
-    3rd step in supplychain
-    Allows distributor to purchase food Item
-    */
+
 
     function purchaseItemByDistributor(uint _productcode) public payable
-        onlyDistributor
-        forSaleByFarmer(_productcode) 
+        onlyDistributor()
+        producedByFarmer(_productcode) 
         paidEnough(items[_productcode].productPrice)
         checkValue(_productcode, payable(msg.sender)) 
         {
@@ -273,78 +206,16 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         emit PurchasedByDistributor(_productcode);
     }
 
-      /*
-    4th step in supplychain
-    Allows farmer to ship food item purchased by distributor
-     */
-
-    function shippedItemByFarmer(uint _productcode) public payable
-        onlyFarmer() 
-        purchasedByDistributor(_productcode)
-        verifyCaller(items[_productcode].originFarmerID)
-        {
-        items[_productcode].itemState = State.ShippedByFarmer; // update state
-        emit ShippedByFarmer(_productcode);
-    }
-      
-    /*
-    5th step in supplychain
-    Allows distributor to receive food item
-    */
-    function receivedItemByDistributor(uint _productcode) public
-        onlyDistributor() 
-        shippedByFarmer(_productcode)
-        verifyCaller(items[_productcode].entityID)
-        {
-        items[_productcode].itemState = State.ReceivedByDistributor; // update state
-        emit ReceivedByDistributor(_productcode);
-    }
-
-    /*
-    6th step in supplychain
-    Allows distributor to process food item
-    */
-    function processedItemByDistributor(uint _productcode,uint slices) public
-        onlyDistributor() 
-        receivedByDistributor(_productcode)
-        verifyCaller(items[_productcode].entityID) 
-        {
-        items[_productcode].itemState = State.ProcessedByDistributor; // update state
-        items[_productcode].productSliced = slices; // add slice amount
-        emit ProcessedByDistributor(_productcode);
-    }
-    
-    /*
-    7th step in supplychain
-    Allows distributor to package food item
-    */
-    function packageItemByDistributor(uint _productcode) public
-        onlyDistributor() 
-        processByDistributor(_productcode)
-        verifyCaller(items[_productcode].entityID) 
-        {
-        items[_productcode].itemState = State.PackageByDistributor;
-        emit PackagedByDistributor(_productcode);
-    }
-
-    /*
-    8th step in supplychain
-    Allows distributor to sell food item
-    */ 
     function sellItemByDistributor(uint _productcode, uint _price) public
-        onlyDistributor() 
-        packagedByDistributor(_productcode)
+        onlyDistributor()                       
+        purchasedByDistributor(_productcode)
         verifyCaller(items[_productcode].entityID) 
-        {
+        {                                                  
             items[_productcode].itemState = State.ForSaleByDistributor;
             items[_productcode].productPrice = _price;
             emit ForSaleByDistributor(_productcode);
-    }
+    }                                                                    
 
-    /*
-    9th step in supplychain
-    Allows retailer to purchase food item
-    */
     function purchaseItemByRetailer(uint _productcode) public payable
         onlyRetailer() 
         forSaleByDistributor(_productcode)
@@ -363,45 +234,26 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         emit PurchasedByRetailer(_productcode);
     }
 
-    /*
-    10th step in supplychain
-    Allows Distributor to ship
-    */
-    function shippedItemByDistributor(uint _productcode) public
-        onlyDistributor() 
+    function processedAndPackagedItemByRetailer(uint _productcode, uint slices) public
+        onlyRetailer()  
         purchasedByRetailer(_productcode)
-        verifyCaller(items[_productcode].distributorID) 
-        {
-        items[_productcode].itemState = State.ShippedByDistributor;
-        emit ShippedByDistributor(_productcode);
-    }
-    /*
-    11th step in supplychain
-    */
-    function receivedItemByRetailer(uint _productcode) public
-        onlyRetailer() 
-        shippedByDistributor(_productcode)
         verifyCaller(items[_productcode].entityID) 
         {
-        items[_productcode].itemState = State.ReceivedByRetailer;
-        emit ReceivedByRetailer(_productcode);
+        items[_productcode].itemState = State.ProcessedAndPackagedByRetailer;
+        items[_productcode].productSliced = slices; // add slice amount
+        emit ProcessedAndPackagedByRetailer(_productcode);
     }
 
-    /*
-    12th step in supplychain
-    */
     function sellItemByRetailer(uint _productcode, uint _price) public
         onlyRetailer()  
-        receivedByRetailer(_productcode)
+        processedAndPackagedByRetailer(_productcode)
         verifyCaller(items[_productcode].entityID) 
         {
         items[_productcode].itemState = State.ForSaleByRetailer;
         items[_productcode].productPrice = _price;
         emit ForSaleByRetailer(_productcode);
     }
-    /*
-    13th step in supplychain purchaseItemByConsumer
-    */
+
     function purchaseItemByConsumer(uint _productcode) public payable
         onlyConsumer()  
         forSaleByRetailer(_productcode)
@@ -421,6 +273,7 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         emit PurchasedByConsumer(_productcode);
     }
 
+
     // Define a function 'fetchItemBufferOne' that fetches the data
     function fetchItemBufferOne(uint _productcode) public view returns
         (
@@ -428,10 +281,6 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         uint itemProductCode,
         address ownerID,
         address originFarmerID,
-        string memory  originFarmName,
-        string memory originFarmInformation,
-        string memory originFarmLatitude,
-        string memory originFarmLongitude,
         uint productDate,
         string memory productImageHash,
         uint productSliced
@@ -446,10 +295,6 @@ contract Supplychain is ConsumerRole, RetailerRole, FarmerRole, DistributorRole,
         item.productcode,
         item.entityID,
         item.originFarmerID,
-        item.originFarmName,
-        item.originFarmInformation,
-        item.originFarmLatitude,
-        item.originFarmLongitude,
         item.productDate,
         item.productImageHash,
         item.productSliced
