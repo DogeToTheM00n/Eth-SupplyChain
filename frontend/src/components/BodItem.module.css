@@ -1,4 +1,9 @@
 .BodItem{
-    margin-bottom: 5%;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(221, 162, 86);
+    flex: 1;
+    background-color: #c3f5a2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

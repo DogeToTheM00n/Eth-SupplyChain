@@ -7,7 +7,7 @@ const WalletView = () => {
     const [show, setShow] = useState(false)
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [formValues, setFormValues] = useState({to: '', value: '', data: ''})
+    const [formValues, setFormValues] = useState({to: '', value: '', address: ''})
     const handleChange = (event) => {
         setFormValues((prev) => {
             return {
@@ -57,11 +57,11 @@ const WalletView = () => {
                     />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                    <Form.Label>Data</Form.Label>
+                    <Form.Label>Address</Form.Label>
                     <Form.Control
                         required
                         type="text"
-                        value={formValues.data}
+                        value={formValues.address}
                         onChange={handleChange}
                         name='data'
                     />

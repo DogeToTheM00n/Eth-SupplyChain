@@ -1,6 +1,6 @@
-.ProductList{
+.CustomerList{
     border: 1px solid rgba(200,200,200);
-    width: 80%;
+    width: 60%;
     margin: auto;
     display: flex;
     flex-direction: column;
