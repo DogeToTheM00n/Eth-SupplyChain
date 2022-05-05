@@ -35,7 +35,7 @@ const CeoPage = () => {
         <div style={{ marginTop: "10vh" }}>
             {/* <div style={{ width: "40%", textAlign: "center", margin: "auto", fontSize: "40px" }}>Board of Directors</div> */}
             <div style={{ width: "40%", textAlign: "center", margin: "auto", paddingBottom: "2vh" }}>Your Address: 0x7CA42Bc582CC8F230E9ff0f928aC4bFeE27EeEa5</div>
-            <div style={{ width: "40%", textAlign: "center", margin: "auto", paddingBottom: "2vh" }}><span>Balance: 18 ETH</span> <span style={{paddingBottom: '0.1vh'}}><IoAddCircleSharp/></span></div>
+            <div style={{ width: "40%", textAlign: "center", margin: "auto", paddingBottom: "2vh" }}><span>Balance: 18 ETH</span> <span style={{cursor: 'pointer'}}><IoAddCircleSharp/></span></div>
             <Tabs
                 id="controlled-tab-example"
                 activeKey={key}
