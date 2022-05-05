@@ -65,6 +65,7 @@ contract Multisigwallet {
     function getBalance() public view returns(uint){
         return address(this).balance;
     }
+    
     // Propose a new transaction 
     function proposeTransaction(address _to, uint _value, bytes memory _data) public  {
         uint txIndex =transactions.length;

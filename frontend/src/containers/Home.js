@@ -1,13 +1,17 @@
 import React from 'react'
 import {useState} from 'react';
 import {useEffect} from 'react';
-import {ethers} from 'ethers';
 import {Button} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import {ethers} from 'ethers';
+
+const PREFIX ='SUPPLY_CHAIN_MANAGEMENT';
+
 const Home = () => {
 
-    const [account, setaccount] = useState('0x0');
-    useEffect( () => {
+    const [account, setaccount] = useState("0x0");
+
+    useEffect(() => {
         const funUseEffect= async ()=>{
             const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
             // Prompt user for account connections
