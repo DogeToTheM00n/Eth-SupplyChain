@@ -1,0 +1,18 @@
+.RetailerListItem{
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #c3f5a2;
+    border-bottom: 1px solid rgb(221, 162, 86);
+}
+
+.Mutton{
+    height: 100%;
+    width: 15%;
+    background-color: burlywood;
+    text-align: center;
+    padding: 1%;
+}

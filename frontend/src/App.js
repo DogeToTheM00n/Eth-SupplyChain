@@ -6,6 +6,7 @@ import FarmerPage from './containers/FarmerPage';
 import Home from './containers/Home';
 import DistributorPage from './containers/DistributorPage';
 import CustomerPage from './containers/CustomerPage';
+import RetailerPage from './containers/RetailerPage';
 function App() {
   return (
     <>
@@ -17,6 +18,7 @@ function App() {
           <Route path="/farmer" element={<FarmerPage/>} />
           <Route path="/distributor" element={<DistributorPage/>} />
           <Route path="/customer" element={<CustomerPage/>} />
+          <Route path="/retailer" element={<RetailerPage/>} />
         </Routes>
       </Router>
     </>

@@ -1,0 +1,10 @@
+.RetailerList{
+    border: 1px solid rgba(200,200,200);
+    width: 60%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: stretch;
+    height: 40vh;
+}

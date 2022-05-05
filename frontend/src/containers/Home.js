@@ -1,9 +1,9 @@
 import React from 'react'
-import {useState} from 'react';
-import {useEffect} from 'react';
-import {ethers} from 'ethers';
-import {Button} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import {useState} from 'react'
+import {useEffect} from 'react'
+import {ethers} from 'ethers'
+import { Link } from 'react-router-dom'
+import classes from './Home.module.css'
 const Home = () => {
 
     const [account, setaccount] = useState('0x0');
@@ -20,18 +20,20 @@ const Home = () => {
     }, []);
 
     return (
-        <>
-        <div style = {{marginTop: "10vh"}}>
-            <div style={{width: "40%", textAlign: "center", margin: "auto", fontSize: "35px"}}>Welcome to Supply chain management with Ethereum</div>
-            <div style={{width: "40%", textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Your Address: {account}</div>
-            <div style={{width: "40%", margin: "auto", display: "flex", height: "50vh", justifyContent: "stretch", flexDirection: "column", marginTop: "2vh", alignItems: "center"}}>
-                <Link to="/admin"><div>CEO Page</div></Link>
-                <Link to="/wallet"><div>Board of Directors Page</div></Link>
-                <Link to="/farmer"><div>Farmer Page</div></Link>
-                <Link to="/customer"><div>Customer Page</div></Link>
+        <div>
+        <div style = {{marginLeft: 'auto', marginRight: 'auto', marginTop: "10vh", width: "40%"}}>
+            <div style={{textAlign: "center", margin: "auto", fontSize: "35px"}}>Welcome to Supply chain management with Ethereum</div>
+            <div style={{textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Your Address: {account}</div>
+            <div className={classes.optionList}>
+                <div className={classes.optionItem}><Link to="/admin" style={{textDecoration: "none"}}>CEO Page</Link></div>
+                <div className={classes.optionItem}><Link to="/wallet" style={{textDecoration: "none"}}>Board of Directors Page</Link></div>
+                <div className={classes.optionItem}><Link to="/farmer" style={{textDecoration: "none"}}>Farmer Page</Link></div>
+                <div className={classes.optionItem}><Link to="/customer" style={{textDecoration: "none"}}>Customer Page</Link></div>
+                <div className={classes.optionItem}><Link to="/distributor" style={{textDecoration: "none"}}>Distributor Page</Link></div>
+                <div className={classes.optionItem}><Link to="/retailer" style={{textDecoration: "none"}}>Retailer Page</Link></div>
             </div>
         </div>
-        </>
+        </div>
     )
 }
 

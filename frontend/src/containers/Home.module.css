@@ -1,0 +1,31 @@
+.optionList{
+    margin: auto;
+    display: flex; 
+    height: 50vh;
+    justify-content: stretch; 
+    flex-direction: column; 
+    margin-top: 2vh;
+    align-items: center;
+}
+
+.optionItem{
+    display: flex;
+    align-items: center;
+    flex: 1;
+    border-bottom: 1px solid burlywood;
+    width: 100%;
+    justify-content: center;
+    background-color: aquamarine;
+    cursor: pointer;
+}
+
+.optionItem:hover{
+    display: flex;
+    align-items: center;
+    flex: 1;
+    border-bottom: 1px solid burlywood;
+    width: 102%;
+    justify-content: center;
+    background-color: aquamarine;
+    cursor: pointer;
+}
