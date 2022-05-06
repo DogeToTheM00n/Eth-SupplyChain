@@ -5,6 +5,7 @@ import classes from './CeoPage.module.css'
 import { useEffect, useState } from "react"
 import {IoAddCircleSharp} from "react-icons/io5"
 import Multisigwallet from '../artifacts/frontend/src/contracts/multisig/Multisigwallet.sol/Multisigwallet.json';
+import Accessregistry from '../artifacts/frontend/src/contracts/multisig/AccessRegistry.sol/Accessregistry.json'
 import {ethers} from 'ethers';
 
 const CeoPage = () => {
@@ -20,27 +21,38 @@ const CeoPage = () => {
     const [provider, setprovider] = useState(null);
     const [signer, setsigner] = useState(null);
     const [contract, setcontract] = useState(null);
+    const [accessRegistryContract, setAccessRegistryContract] = useState(null)
     const [walletBalance, setwalletBalance] = useState(null);
+    const [owners, setOwners] = useState([])
+
+    const arContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     const changeBod = (event) => {
         setNewBod(event.target.value)
     }
     const changeFunds = (event) => {
         setFunds(event.target.value)
     }
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log(newBod)
+        console.log(accessRegistryContract)
+        try{
+            await accessRegistryContract.addOwner(newBod);
+        }
+        catch(err){
+            console.log(err)
+        }
+        handleClose()
     }
     const handleSubmit1 = async (event) => {
         event.preventDefault()
         let tx = await signer.sendTransaction({
-            to: "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+            to: "0xDc6v4a140Aa3E981100a9becA4E685f962f0cF6C9",
             value: funds,
         });
     }
     // 10000000000000000000
     window.Multisigwallet=Multisigwallet;
-    const contractAddress ="0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
+    const contractAddress = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
     
     useEffect(() => {
         // console.log(Multisigwallet);
@@ -53,12 +65,27 @@ const CeoPage = () => {
             const contractInstance =new ethers.Contract(contractAddress,Multisigwallet.abi,signer);
             setcontract(contractInstance);
 
+            const arContract = new ethers.Contract(arContractAddress, Accessregistry.abi, signer)
+            setAccessRegistryContract(arContract)
+
             try {
                 const walletBalance = await contractInstance.getBalance();
                 // console.log(ethers.utils.formatEther(walletBalance))
                 setwalletBalance(ethers.utils.formatEther(walletBalance))
             } catch (err) {
                 console.log("Error: ", err)
+            }
+
+            try{
+                const count = await arContract.getOwnerCount()
+                const temp = []
+                for(let idx = 0; idx<count; idx++){
+                    temp.push(await arContract.owners(idx))
+                }
+                setOwners(temp)
+            }
+            catch(err){
+                console.log(err)
             }
         }
         init();
@@ -67,7 +94,7 @@ const CeoPage = () => {
     return <>
         <div style={{ marginTop: "10vh" }}>
             {/* <div style={{ width: "40%", textAlign: "center", margin: "auto", fontSize: "40px" }}>Board of Directors</div> */}
-            <div style={{ width: "40%", textAlign: "center", margin: "auto", paddingBottom: "2vh" }}>Your Address: 0x7CA42Bc582CC8F230E9ff0f928aC4bFeE27EeEa5</div>
+            <div style={{ width: "40%", textAlign: "center", margin: "auto", paddingBottom: "2vh" }}>Your Address: {localStorage.getItem('address')}</div>
             <div style={{ width: "40%", textAlign: "center", margin: "auto", paddingBottom: "2vh" }}><span>Balance: {walletBalance} ETH</span> <span style={{cursor: 'pointer'}} onClick={handleShow1}><IoAddCircleSharp/></span></div>
             <Tabs
                 id="controlled-tab-example"
@@ -77,18 +104,18 @@ const CeoPage = () => {
                 style={{width: "40%", margin: 'auto'}}
             >
                 <Tab eventKey="BOD" title="B.O.D">
-                    <ListBod/>
+                    <ListBod addresses={owners}/>
                     <AddButton handleShow={handleShow} handleShow1={handleShow1} />
                 </Tab>
                 <Tab eventKey="Distributors" title="Distributors">
-                    <ListBod/>
+                    {/* <ListBod/> */}
                 </Tab>
                 <Tab eventKey="Farmers" title="Farmers">
-                    <ListBod/>
+                    {/* <ListBod/> */}
                     <AddButton handleShow={handleShow} handleShow1={handleShow1} />
                 </Tab>
                 <Tab eventKey="Customers" title="Customers">
-                    <ListBod/>
+                    {/* <ListBod/> */}
                     <AddButton handleShow={handleShow} handleShow1={handleShow1} />
                 </Tab>
             </Tabs>

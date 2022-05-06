@@ -4,6 +4,7 @@ import {useEffect} from 'react';
 import {Button} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import {ethers} from 'ethers';
+import classes from './Home.module.css'
 
 const PREFIX ='SUPPLY_CHAIN_MANAGEMENT';
 
@@ -18,6 +19,7 @@ const Home = () => {
             await provider.send("eth_requestAccounts", []);
             const signer = provider.getSigner();
             setaccount(await signer.getAddress());
+            localStorage.setItem('address', await signer.getAddress())
             console.log("Account:", await signer.getAddress());
         }
         funUseEffect();

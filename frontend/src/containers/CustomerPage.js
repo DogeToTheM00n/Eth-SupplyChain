@@ -5,7 +5,7 @@ const CustomerPage = () => {
         <>
             <div style = {{marginTop: "10vh"}}>
                 <div style={{width: "40%", textAlign: "center", margin: "auto", fontSize: "40px"}}>Customer Dashboard</div>
-                <div style={{width: "40%", textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Your Address: 0x7CA42Bc582CC8F230E9ff0f928aC4bFeE27EeEa5</div>
+                <div style={{width: "40%", textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Your Address: {localStorage.getItem('address')}</div>
                 <div style={{width: "40%", textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Customer Name: Sarthak</div>
             </div>
             <CustomerList productlist = {productlist}/>

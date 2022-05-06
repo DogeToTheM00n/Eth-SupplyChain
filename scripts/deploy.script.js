@@ -24,7 +24,7 @@ async function main() {
   const accessregistry = await Accessregistry.deploy();
   await accessregistry.deployed();
 
-  // console.log("Accessregistry deployed to:", accessregistry.address);
+  console.log("Accessregistry deployed to:", accessregistry.address);
 
   // // CEO add board of directors
   await accessregistry.addOwner(BOD1.address);

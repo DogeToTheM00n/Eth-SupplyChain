@@ -30,7 +30,7 @@ const FarmerPage = () => {
         <>
         <div style = {{marginTop: "10vh"}}>
             <div style={{width: "40%", textAlign: "center", margin: "auto", fontSize: "40px"}}>My Assets</div>
-            <div style={{width: "40%", textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Your Address: 0x7CA42Bc582CC8F230E9ff0f928aC4bFeE27EeEa5</div>
+            <div style={{width: "40%", textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Your Address: {localStorage.getItem('address')}</div>
             <div style={{width: "40%", textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Farmer Name: Analkrit</div>
             <div style={{width: "40%", textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Farmer Information: Good Farmer</div>
             <div style={{width: "40%", textAlign: "center", margin: "auto", paddingBottom: "1vh"}}>Location: Haryana from Hisar</div>
